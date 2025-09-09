@@ -124,8 +124,8 @@ export default function App() {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(${size}, 60px)`,
-          gridTemplateRows: `repeat(${size}, 60px)`,
+          gridTemplateColumns: `repeat(${size}, 120px)`,
+          gridTemplateRows: `repeat(${size}, 120px)`,
           gap: '10px',
           justifyContent: 'center',
         }}
@@ -135,8 +135,8 @@ export default function App() {
             key={card.id}
             onClick={() => handleCardClick(idx)}
             style={{
-              width: 60,
-              height: 60,
+              width: 120,
+              height: 120,
               background: card.flipped || card.matched ? '#fff' : '#333',
               display: 'flex',
               alignItems: 'center',
