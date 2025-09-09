@@ -166,45 +166,60 @@ export default function App() {
             <span style={{ marginLeft: 24, color: '#00332d' }}>Turn: Player {turn + 1}</span>
           </div>
         ) : (
-          <div style={{
-            width: 340,
-            height: 32,
-            background: 'linear-gradient(90deg, #1ecb4f 0%, #ffe600 50%, #ff0000 100%)',
-            borderRadius: 16,
-            position: 'relative',
-            margin: '0 auto',
-            boxShadow: '0 1px 8px #eee',
-            border: '2px solid #FF7F02',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            {/* Sliding line */}
+          <>
             <div style={{
-              position: 'absolute',
-              left: `${(elapsed / 60) * 100}%`,
-              top: 0,
-              bottom: 0,
-              width: 4,
-              background: '#222',
-              borderRadius: 2,
-              boxShadow: '0 0 6px #fff',
-              transition: 'left 1s linear',
-              zIndex: 2,
-            }} />
-            {/* Score label removed as requested */}
-            {/* Timer label */}
-            <span style={{
-              position: 'absolute',
-              right: 16,
+              width: 340,
+              height: 32,
+              background: 'linear-gradient(90deg, #1ecb4f 0%, #ffe600 50%, #ff0000 100%)',
+              borderRadius: 16,
+              position: 'relative',
+              margin: '0 auto',
+              boxShadow: '0 1px 8px #eee',
+              border: '2px solid #FF7F02',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              {/* Sliding line */}
+              <div style={{
+                position: 'absolute',
+                left: `${(elapsed / 60) * 100}%`,
+                top: 0,
+                bottom: 0,
+                width: 4,
+                background: '#222',
+                borderRadius: 2,
+                boxShadow: '0 0 6px #fff',
+                transition: 'left 1s linear',
+                zIndex: 2,
+              }} />
+              {/* Timer label */}
+              <span style={{
+                position: 'absolute',
+                right: 16,
+                color: '#fff',
+                fontWeight: 900,
+                fontSize: 18,
+                textShadow: '1px 1px 2px #00332d',
+                zIndex: 3,
+                letterSpacing: 1,
+              }}>{elapsed}s</span>
+            </div>
+            {/* Dynamic message below the bar */}
+            <div style={{
+              marginTop: 8,
+              fontSize: 20,
+              fontWeight: 700,
               color: '#fff',
-              fontWeight: 900,
-              fontSize: 18,
-              textShadow: '1px 1px 2px #00332d',
-              zIndex: 3,
-              letterSpacing: 1,
-            }}>{elapsed}s</span>
-          </div>
+              textShadow: '1px 1px 2px #000, -1px -1px 2px #000',
+              minHeight: 28,
+            }}>
+              {elapsed <= 5 && 'transcending the ordinary'}
+              {elapsed > 5 && elapsed <= 20 && 'ordinary'}
+              {elapsed > 20 && elapsed <= 40 && 'descending the ordinary'}
+              {elapsed > 40 && 'personally fired by Jim Olson'}
+            </div>
+          </>
         )}
       </div>
       <div
