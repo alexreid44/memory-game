@@ -1,13 +1,15 @@
 
 import React, { useState } from 'react';
 
-const SYMBOLS = [
-  '🍎', '🍌', '🍇', '🍉', '🍒', '🍋', '🍓', '🍍',
-  '🥝', '🥥', '🥑', '🍆', '🥕', '🌽', '🍄', '🥦',
-  '🧀', '🍔', '🍕', '🍟', '🌭', '🍿', '🥨', '🥐',
-  '🍩', '🍪', '🍰', '🧁', '🍫', '🍬', '🍭', '🍮',
-  '🍯', '🥜', '🍤', '🍣', '🍦', '🍧', '🍨', '🍢',
-  '🍡', '🍙', '🍚', '🍛', '🍜', '🍝', '🍠', '🍥',
+
+// List of image filenames in public/images
+const IMAGE_FILENAMES = [
+  'AlisonGarback.jpg', 'BrianSturgeon.jpg', 'ChadMacDonald.jpg', 'ColeenFinnegan.jpg',
+  'CraigWood.jpg', 'DaleJohnson.jpg', 'DannyWunder.jpg', 'DrewCordell.jpg',
+  'EdSchwartz.jpg', 'EllisonLiebrecht.jpg', 'GaryGentry.jpg', 'GregGalloway.jpg',
+  'JamieWorley.jpg', 'JimOlson.jpg', 'JoelEllenbarger.jpg', 'JustinParkhill.jpg',
+  'KarimRayani.jpg', 'KaytekPrzybylski.jpg', 'KeitherGruenberg.jpg', 'LisaBrown.jpg',
+  'RebeccaGesell.jpg', 'RichardBourke.jpg', 'ScottHryniuk.jpg', 'SuzanneWilliams.jpg',
 ];
 
 function shuffle(array) {
@@ -22,10 +24,14 @@ function shuffle(array) {
 
 function generateCards(size) {
   const numPairs = (size * size) / 2;
-  const selectedSymbols = SYMBOLS.slice(0, numPairs);
-  const cards = shuffle([...selectedSymbols, ...selectedSymbols]).map((symbol, idx) => ({
+  let selectedImages = IMAGE_FILENAMES.slice(0, numPairs);
+  // If not enough images, repeat images to fill the grid
+  while (selectedImages.length < numPairs) {
+    selectedImages = selectedImages.concat(IMAGE_FILENAMES.slice(0, numPairs - selectedImages.length));
+  }
+  const cards = shuffle([...selectedImages, ...selectedImages]).map((image, idx) => ({
     id: idx,
-    symbol,
+    image,
     flipped: false,
     matched: false,
   }));
@@ -61,7 +67,7 @@ export default function App() {
 
     if (newFlipped.length === 2) {
       const [first, second] = newFlipped;
-      if (newCards[first].symbol === newCards[second].symbol) {
+      if (newCards[first].image === newCards[second].image) {
         setTimeout(() => {
           newCards[first].matched = true;
           newCards[second].matched = true;
@@ -132,8 +138,6 @@ export default function App() {
               width: 60,
               height: 60,
               background: card.flipped || card.matched ? '#fff' : '#333',
-              color: card.flipped || card.matched ? '#222' : 'transparent',
-              fontSize: 32,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -142,9 +146,18 @@ export default function App() {
               cursor: card.flipped || card.matched ? 'default' : 'pointer',
               transition: 'background 0.3s, color 0.3s',
               userSelect: 'none',
+              overflow: 'hidden',
+              padding: 0,
             }}
           >
-            {card.symbol}
+            {(card.flipped || card.matched) ? (
+              <img
+                src={card.image ? `/images/${card.image}` : ''}
+                alt="card"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                draggable={false}
+              />
+            ) : null}
           </div>
         ))}
       </div>
