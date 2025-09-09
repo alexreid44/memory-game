@@ -98,10 +98,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [players, gameOver, matchedCount]);
 
-  // Reset timer on new game
-  React.useEffect(() => {
-    setElapsed(0);
-  }, [cards]);
+
 
   function startGame() {
     setCards(generateCards(size));
