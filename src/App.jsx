@@ -38,6 +38,7 @@ function generateCards(size) {
   return cards;
 }
 
+
 export default function App() {
   const size = 4;
   const [players, setPlayers] = useState(1);
@@ -47,6 +48,20 @@ export default function App() {
   const [turn, setTurn] = useState(0);
   const [scores, setScores] = useState([0, 0]);
   const [gameOver, setGameOver] = useState(false);
+  const [elapsed, setElapsed] = useState(0); // seconds
+  React.useEffect(() => {
+    if (players !== 1 || gameOver) return;
+    if (matchedCount === (size * size) / 2) return;
+    const interval = setInterval(() => {
+      setElapsed(e => (e < 60 ? e + 1 : 60));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [players, gameOver, matchedCount]);
+
+  // Reset timer on new game
+  React.useEffect(() => {
+    setElapsed(0);
+  }, [cards]);
 
   function startGame() {
     setCards(generateCards(size));
@@ -55,6 +70,7 @@ export default function App() {
     setTurn(0);
     setScores([0, 0]);
     setGameOver(false);
+    setElapsed(0);
   }
 
   function handleCardClick(idx) {
@@ -150,7 +166,55 @@ export default function App() {
             <span style={{ marginLeft: 24, color: '#00332d' }}>Turn: Player {turn + 1}</span>
           </div>
         ) : (
-          <span style={{ color: '#444', fontWeight: 700, fontSize: 22, background: '#fffdfa', borderRadius: 8, padding: '4px 16px', boxShadow: '0 1px 4px #eee', border: '1.5px solid #FF7F02' }}>Score: {scores[0]}</span>
+          <div style={{
+            width: 340,
+            height: 32,
+            background: 'linear-gradient(90deg, #1ecb4f 0%, #ffe600 50%, #ff0000 100%)',
+            borderRadius: 16,
+            position: 'relative',
+            margin: '0 auto',
+            boxShadow: '0 1px 8px #eee',
+            border: '2px solid #FF7F02',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            {/* Sliding line */}
+            <div style={{
+              position: 'absolute',
+              left: `${(elapsed / 60) * 100}%`,
+              top: 0,
+              bottom: 0,
+              width: 4,
+              background: '#222',
+              borderRadius: 2,
+              boxShadow: '0 0 6px #fff',
+              transition: 'left 1s linear',
+              zIndex: 2,
+            }} />
+            {/* Score label */}
+            <span style={{
+              position: 'absolute',
+              left: 16,
+              color: '#fff',
+              fontWeight: 900,
+              fontSize: 18,
+              textShadow: '1px 1px 2px #00332d',
+              zIndex: 3,
+              letterSpacing: 1,
+            }}>Score: {scores[0]}</span>
+            {/* Timer label */}
+            <span style={{
+              position: 'absolute',
+              right: 16,
+              color: '#fff',
+              fontWeight: 900,
+              fontSize: 18,
+              textShadow: '1px 1px 2px #00332d',
+              zIndex: 3,
+              letterSpacing: 1,
+            }}>{elapsed}s</span>
+          </div>
         )}
       </div>
       <div
