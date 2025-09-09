@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 
 // List of image filenames in public/images
@@ -40,6 +40,7 @@ function generateCards(size) {
 
 
 export default function App() {
+  const [showLose, setShowLose] = useState(false);
   const size = 4;
   const [players, setPlayers] = useState(1);
   const [cards, setCards] = useState(generateCards(size));
@@ -49,6 +50,45 @@ export default function App() {
   const [scores, setScores] = useState([0, 0]);
   const [gameOver, setGameOver] = useState(false);
   const [elapsed, setElapsed] = useState(0); // seconds
+
+  // For pinging image within grid area
+  const [imgPos, setImgPos] = useState({ top: 100, left: 100 });
+  const gridRef = useRef(null);
+  // Move image within grid area
+  React.useEffect(() => {
+    function randomPosInGrid() {
+      const imgSize = 80;
+      const pad = 4;
+      if (!gridRef.current) return { top: 100, left: 100 };
+      const rect = gridRef.current.getBoundingClientRect();
+      // The parent div is relative, so use rect relative to viewport, and offset by scroll
+      const parentRect = gridRef.current.parentElement.getBoundingClientRect();
+      const offsetTop = rect.top - parentRect.top;
+      const offsetLeft = rect.left - parentRect.left;
+      const maxTop = rect.height - imgSize - pad;
+      const maxLeft = rect.width - imgSize - pad;
+      return {
+        top: offsetTop + Math.floor(Math.random() * maxTop) + pad,
+        left: offsetLeft + Math.floor(Math.random() * maxLeft) + pad,
+      };
+    }
+    const interval = setInterval(() => {
+      setImgPos(randomPosInGrid());
+    }, 1200);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Hide lose banner and restart game after showing
+  React.useEffect(() => {
+    if (showLose) {
+      const timeout = setTimeout(() => {
+        setShowLose(false);
+        startGame();
+      }, 1800);
+      return () => clearTimeout(timeout);
+    }
+  }, [showLose]);
+
   React.useEffect(() => {
     if (players !== 1 || gameOver) return;
     if (matchedCount === (size * size) / 2) return;
@@ -117,11 +157,34 @@ export default function App() {
         fontFamily: 'sans-serif',
         textAlign: 'center',
         minHeight: '100vh',
-  background: 'linear-gradient(135deg, #00332d 0%, #005046 80%, #FF7F02 100%)',
+        background: 'linear-gradient(135deg, #00332d 0%, #005046 80%, #FF7F02 100%)',
         margin: 0,
         padding: 0,
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
+      {/* Pinging image */}
+      <img
+        src="https://media.licdn.com/dms/image/v2/D4E03AQFwGhFX7UU_dw/profile-displayphoto-scale_400_400/B4EZgPoM.AHEAg-/0/1752608854400?e=1760572800&v=beta&t=UHFAtC7mPE4pAfBdCPLKYRfv0PqXdKYKod4L60jvEQ8"
+        alt="pinging"
+        onClick={() => setShowLose(true)}
+        style={{
+          position: 'absolute',
+          top: imgPos.top,
+          left: imgPos.left,
+          width: 80,
+          height: 80,
+          borderRadius: '50%',
+          boxShadow: '0 4px 16px #0008',
+          border: '3px solid #fff',
+          zIndex: 1000,
+          transition: 'top 0.7s cubic-bezier(.5,1.5,.5,1), left 0.7s cubic-bezier(.5,1.5,.5,1)',
+          pointerEvents: showLose ? 'none' : 'auto',
+          userSelect: 'none',
+          cursor: 'pointer',
+        }}
+      />
       <h1 style={{
         color: '#FF7F02',
         letterSpacing: 2,
@@ -223,7 +286,9 @@ export default function App() {
         )}
       </div>
       <div
+        ref={gridRef}
         style={{
+          position: 'relative',
           display: 'grid',
           gridTemplateColumns: `repeat(${size}, 90px)`,
           gridTemplateRows: `repeat(${size}, 90px)`,
@@ -237,6 +302,32 @@ export default function App() {
           width: 'max-content',
         }}
       >
+        {showLose && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: 'rgba(200,0,0,0.97)',
+              color: '#fff',
+              fontWeight: 900,
+              fontSize: 64,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 2000,
+              borderRadius: 18,
+              letterSpacing: 4,
+              textShadow: '2px 2px 8px #000',
+              transition: 'opacity 0.3s',
+              pointerEvents: 'none',
+            }}
+          >
+            YOU LOSE
+          </div>
+        )}
         {cards.map((card, idx) => (
           <div
             key={card.id}
