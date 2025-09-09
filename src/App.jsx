@@ -39,7 +39,7 @@ function generateCards(size) {
 }
 
 export default function App() {
-  const [size, setSize] = useState(4);
+  const size = 4;
   const [players, setPlayers] = useState(1);
   const [cards, setCards] = useState(generateCards(size));
   const [flipped, setFlipped] = useState([]);
@@ -99,13 +99,7 @@ export default function App() {
     <div style={{ fontFamily: 'sans-serif', textAlign: 'center', marginTop: 20 }}>
       <h1>Memory Game</h1>
       <div style={{ marginBottom: 16 }}>
-        <label>Grid Size: </label>
-        <select value={size} onChange={e => setSize(Number(e.target.value))}>
-          <option value={4}>4x4</option>
-          <option value={6}>6x6</option>
-          <option value={8}>8x8</option>
-        </select>
-        <label style={{ marginLeft: 16 }}>Players: </label>
+        <label>Players: </label>
         <select value={players} onChange={e => setPlayers(Number(e.target.value))}>
           <option value={1}>1</option>
           <option value={2}>2</option>
