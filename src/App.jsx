@@ -80,6 +80,7 @@ export default function App() {
           if (matchedCount + 1 === (size * size) / 2) {
             setGameOver(true);
           }
+          // Do NOT change turn on a match
         }, 800);
       } else {
         setTimeout(() => {
@@ -87,6 +88,7 @@ export default function App() {
           newCards[second].flipped = false;
           setCards([...newCards]);
           setFlipped([]);
+          // Change turn on a miss in 2-player mode
           if (players === 2) setTurn((turn + 1) % 2);
         }, 800);
       }
