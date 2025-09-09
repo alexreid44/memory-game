@@ -96,34 +96,76 @@ export default function App() {
   }
 
   return (
-    <div style={{ fontFamily: 'sans-serif', textAlign: 'center', marginTop: 20 }}>
-      <h1>Memory Game</h1>
-      <div style={{ marginBottom: 16 }}>
-        <label>Players: </label>
-        <select value={players} onChange={e => setPlayers(Number(e.target.value))}>
+    <div
+      style={{
+        fontFamily: 'sans-serif',
+        textAlign: 'center',
+        minHeight: '100vh',
+  background: 'linear-gradient(135deg, #00332d 0%, #005046 80%, #FF7F02 100%)',
+        margin: 0,
+        padding: 0,
+      }}
+    >
+      <h1 style={{
+        color: '#FF7F02',
+        letterSpacing: 2,
+        fontWeight: 900,
+        fontSize: 48,
+        marginBottom: 8,
+        textTransform: 'uppercase',
+        textShadow: '2px 2px 0 #fff, 4px 4px 0 #00332d',
+      }}>MEMORY GAME</h1>
+  <div style={{ marginBottom: 24, background: '#fffdfa', borderRadius: 12, display: 'inline-block', padding: '12px 32px', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', border: '2px solid #FF7F02' }}>
+        <label style={{ color: '#333', fontWeight: 700, fontSize: 20 }}>Players: </label>
+        <select value={players} onChange={e => setPlayers(Number(e.target.value))} style={{ fontSize: 18, borderRadius: 6, padding: '4px 12px', marginLeft: 8, marginRight: 16, border: '2px solid #bbb', background: '#fff', color: '#222', fontWeight: 700 }}>
           <option value={1}>1</option>
           <option value={2}>2</option>
         </select>
-        <button style={{ marginLeft: 16 }} onClick={startGame}>Start Game</button>
+        <button
+          style={{
+            marginLeft: 16,
+            fontSize: 18,
+            fontWeight: 700,
+            background: 'linear-gradient(90deg, #FF7F02 0%, #FFAE00 100%)',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 6,
+            padding: '8px 24px',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            transition: 'background 0.2s',
+            letterSpacing: 1,
+            textShadow: '1px 1px 0 #b85c00',
+          }}
+          onClick={startGame}
+        >
+          Start Game
+        </button>
       </div>
-      <div style={{ marginBottom: 16 }}>
+      <div style={{ marginBottom: 20 }}>
         {players === 2 ? (
-          <div>
-            <span>Player 1: {scores[0]}</span>
-            <span style={{ marginLeft: 16 }}>Player 2: {scores[1]}</span>
-            <span style={{ marginLeft: 16 }}>Turn: Player {turn + 1}</span>
+          <div style={{ color: '#333', fontWeight: 700, fontSize: 22 }}>
+            <span style={{ color: '#FF7F02' }}>Player 1: {scores[0]}</span>
+            <span style={{ marginLeft: 24, color: '#FFAE00' }}>Player 2: {scores[1]}</span>
+            <span style={{ marginLeft: 24, color: '#00332d' }}>Turn: Player {turn + 1}</span>
           </div>
         ) : (
-          <span>Score: {scores[0]}</span>
+          <span style={{ color: '#444', fontWeight: 700, fontSize: 22, background: '#fffdfa', borderRadius: 8, padding: '4px 16px', boxShadow: '0 1px 4px #eee', border: '1.5px solid #FF7F02' }}>Score: {scores[0]}</span>
         )}
       </div>
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(${size}, 120px)`,
-          gridTemplateRows: `repeat(${size}, 120px)`,
-          gap: '10px',
+          gridTemplateColumns: `repeat(${size}, 90px)`,
+          gridTemplateRows: `repeat(${size}, 90px)`,
+          gap: '18px',
           justifyContent: 'center',
+          background: '#fff8f2',
+          borderRadius: 18,
+          padding: 24,
+          boxShadow: '0 2px 16px rgba(0,0,0,0.08)',
+          margin: '0 auto 24px auto',
+          width: 'max-content',
         }}
       >
         {cards.map((card, idx) => (
@@ -131,26 +173,28 @@ export default function App() {
             key={card.id}
             onClick={() => handleCardClick(idx)}
             style={{
-              width: 120,
-              height: 120,
-              background: card.flipped || card.matched ? '#fff' : '#333',
+              width: 90,
+              height: 90,
+              background: card.flipped || card.matched ? '#fff' : '#00332d',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              borderRadius: 8,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              borderRadius: 16,
+              boxShadow: card.flipped || card.matched ? '0 4px 16px #bbb' : '0 2px 8px #aaa',
               cursor: card.flipped || card.matched ? 'default' : 'pointer',
-              transition: 'background 0.3s, color 0.3s',
+              transition: 'background 0.3s, color 0.3s, box-shadow 0.3s',
               userSelect: 'none',
               overflow: 'hidden',
               padding: 0,
+              border: card.flipped || card.matched ? '2px solid #FF7F02' : '2px solid #00332d',
+              filter: card.flipped || card.matched ? 'none' : 'blur(0.5px)',
             }}
           >
             {(card.flipped || card.matched) ? (
               <img
                 src={card.image ? `/images/${card.image}` : ''}
                 alt="card"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 12, boxShadow: '0 1px 4px #ccc' }}
                 draggable={false}
               />
             ) : null}
@@ -158,7 +202,7 @@ export default function App() {
         ))}
       </div>
       {gameOver && (
-        <div style={{ marginTop: 24, fontSize: 24, color: '#1976d2' }}>
+  <div style={{ marginTop: 24, fontSize: 28, color: '#FF7F02', fontWeight: 900, textShadow: '1px 1px 0 #fff' }}>
           {players === 2
             ? scores[0] === scores[1]
               ? 'It’s a tie!'
