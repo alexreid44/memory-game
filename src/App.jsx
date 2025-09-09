@@ -192,17 +192,7 @@ export default function App() {
               transition: 'left 1s linear',
               zIndex: 2,
             }} />
-            {/* Score label */}
-            <span style={{
-              position: 'absolute',
-              left: 16,
-              color: '#fff',
-              fontWeight: 900,
-              fontSize: 18,
-              textShadow: '1px 1px 2px #00332d',
-              zIndex: 3,
-              letterSpacing: 1,
-            }}>Score: {scores[0]}</span>
+            {/* Score label removed as requested */}
             {/* Timer label */}
             <span style={{
               position: 'absolute',
