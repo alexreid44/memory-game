@@ -88,8 +88,8 @@ export default function App() {
   }
 
   return (
-    <div style={{ fontFamily: 'sans-serif', textAlign: 'center', marginTop: 20, background: '#1a1a2e', minHeight: '100vh', padding: 20, color: '#eaeaea' }}>
-      <h1 style={{ color: '#e94560' }}>Memory Game</h1>
+    <div style={{ fontFamily: 'sans-serif', textAlign: 'center', marginTop: 20, background: '#001f3f', minHeight: '100vh', padding: 20, color: '#eaeaea' }}>
+      <h1 style={{ color: '#ffd700' }}>Memory Game</h1>
       <div style={{ marginBottom: 16 }}>
         <label>Grid Size: </label>
         <select value={size} onChange={e => setSize(Number(e.target.value))}>
@@ -102,7 +102,7 @@ export default function App() {
           <option value={1}>1</option>
           <option value={2}>2</option>
         </select>
-        <button style={{ marginLeft: 16, background: '#e94560', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 4, cursor: 'pointer' }} onClick={startGame}>Start Game</button>
+        <button style={{ marginLeft: 16, background: '#ffd700', color: '#001f3f', border: 'none', padding: '8px 16px', borderRadius: 4, cursor: 'pointer', fontWeight: 'bold' }} onClick={startGame}>Start Game</button>
       </div>
       <div style={{ marginBottom: 16 }}>
         {players === 2 ? (
@@ -131,18 +131,18 @@ export default function App() {
             style={{
               width: 60,
               height: 60,
-              background: card.flipped || card.matched ? '#16213e' : '#0f3460',
+              background: card.flipped || card.matched ? '#002b5c' : '#003366',
               color: card.flipped || card.matched ? '#fff' : 'transparent',
               fontSize: 32,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: 8,
-              boxShadow: '0 2px 8px rgba(233, 69, 96, 0.3)',
+              boxShadow: '0 2px 8px rgba(255, 215, 0, 0.3)',
               cursor: card.flipped || card.matched ? 'default' : 'pointer',
               transition: 'background 0.3s, color 0.3s',
               userSelect: 'none',
-              border: '2px solid #e94560',
+              border: '2px solid #ffd700',
             }}
           >
             {card.symbol}
@@ -150,7 +150,7 @@ export default function App() {
         ))}
       </div>
       {gameOver && (
-        <div style={{ marginTop: 24, fontSize: 24, color: '#00d9ff' }}>
+        <div style={{ marginTop: 24, fontSize: 24, color: '#ffd700' }}>
           {players === 2
             ? scores[0] === scores[1]
               ? 'It’s a tie!'
